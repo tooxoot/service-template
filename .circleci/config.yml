@@ -8,7 +8,42 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: build unittest
+          command: |
+            VERSION=$(git rev-parse --short HEAD)
+            docker build --target unittest -t service-template-unittest:$VERSION .
+      - run:
+          name: build integrationtest
+          command: |
+            VERSION=$(git rev-parse --short HEAD)
+            docker build --target integrationtest -t service-template-integrationtest:$VERSION .
+      - run:
           name: build release
           command: |
             VERSION=$(git rev-parse --short HEAD)
-            docker build --target release -t service-template:$VERSION .
+            docker build --target release -t service-template-release:$VERSION .
+  unittest:
+    working_directory: /unittest
+    docker:
+      - image: docker:17.05.0-ce-git
+    - run:
+          name: run unittest
+          command: |
+            VERSION=$(git rev-parse --short HEAD)
+            docker run -d -p 3000:3000 --name unittest service-template-unittest:$VERSION
+  integrationtest:
+    working_directory: /integrationtest
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - run:
+          name: run release container
+          command: |
+            VERSION=$(git rev-parse --short HEAD)
+            docker run -d -p 3000:3000 --name release service-template-relese:$VERSION
+      - run:
+          name: run integrationtest
+          command: |
+            VERSION=$(git rev-parse --short HEAD)
+            docker run -d -p 3000:3000 --name integrationtest service-template-integrationtest:$VERSION
+

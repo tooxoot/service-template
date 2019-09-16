@@ -3,6 +3,7 @@
   "rules": {
     "typedef": [true, "call-signature", "parameter"],
     "semicolon": false,
-    "newline-per-chained-call": false
+    "newline-per-chained-call": false,
+    "no-backbone-get-set-outside-model": false
   }
 }

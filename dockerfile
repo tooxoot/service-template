@@ -1,19 +1,27 @@
-FROM node:12 as builder
+FROM node:12 as root
 
 WORKDIR /app
 
-FROM builder AS DEV
+FROM root AS dev
 
-FROM builder as release
+
+FROM root as build
 COPY . .
 RUN chown -R node:node /app
 RUN chmod -R 770 /app
 USER node
 RUN npm install
 RUN npm run build
-RUN rm -rf src
 
-WORKDIR /app
+FROM build as unittest
+CMD [ "npm", "run",  "unittest" ]
+
+FROM build as integrationtest
+CMD [ "npm", "run", "integrationtest" ]
+
+FROM build as release
+RUN rm -rf src
+RUN rm -rf dist/test
 
 EXPOSE 3000
-CMD ["node", "/app/dist/index.js"]
+CMD ["node", "/app/dist/src/index.js"]

@@ -6,6 +6,6 @@ services:
       target: dev
     volumes:
       - .:/app
-    command: node dist/index.js
+    command: node dist/src/index.js
     ports:
       - '3000:3000'
