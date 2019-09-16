@@ -10,17 +10,17 @@ jobs:
       - run:
           name: build unittest
           command: |
-            VERSION=$(git rev-parse --short HEAD)
+             echo $CIRCLE_SHA1 | cut -c1-7
             docker build --target unittest -t service-template-unittest:$VERSION .
       - run:
           name: build integrationtest
           command: |
-            VERSION=$(git rev-parse --short HEAD)
+             echo $CIRCLE_SHA1 | cut -c1-7
             docker build --target integrationtest -t service-template-integrationtest:$VERSION .
       - run:
           name: build release
           command: |
-            VERSION=$(git rev-parse --short HEAD)
+             echo $CIRCLE_SHA1 | cut -c1-7
             docker build --target release -t service-template-release:$VERSION .
   unittest:
     working_directory: /unittest
@@ -31,7 +31,7 @@ jobs:
       - run:
           name: run unittest
           command: |
-            VERSION=$(git rev-parse --short HEAD)
+             echo $CIRCLE_SHA1 | cut -c1-7
             docker run -d -p 3000:3000 --name unittest service-template-unittest:$VERSION
   integrationtest:
     working_directory: /integrationtest
@@ -42,12 +42,12 @@ jobs:
       - run:
           name: run release container
           command: |
-            VERSION=$(git rev-parse --short HEAD)
+             echo $CIRCLE_SHA1 | cut -c1-7
             docker run -d -p 3000:3000 --name release service-template-relese:$VERSION
       - run:
           name: run integrationtest
           command: |
-            VERSION=$(git rev-parse --short HEAD)
+             echo $CIRCLE_SHA1 | cut -c1-7
             docker run -d -p 3000:3000 --name integrationtest service-template-integrationtest:$VERSION
 workflows:
   version: 2
