@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  main:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    command: node dist/index.js
+    ports:
+      - '3000:3000'

@@ -1,0 +1,8 @@
+{
+  "extends": ["tslint-microsoft-contrib"],
+  "rules": {
+    "typedef": [true, "call-signature", "parameter"],
+    "semicolon": false,
+    "newline-per-chained-call": false
+  }
+}
