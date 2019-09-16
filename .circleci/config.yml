@@ -26,7 +26,9 @@ jobs:
     working_directory: /unittest
     docker:
       - image: docker:17.05.0-ce-git
-    - run:
+    steps:
+      - setup_remote_docker
+      - run:
           name: run unittest
           command: |
             VERSION=$(git rev-parse --short HEAD)
@@ -36,6 +38,7 @@ jobs:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
+      - setup_remote_docker
       - run:
           name: run release container
           command: |
@@ -46,4 +49,3 @@ jobs:
           command: |
             VERSION=$(git rev-parse --short HEAD)
             docker run -d -p 3000:3000 --name integrationtest service-template-integrationtest:$VERSION
-
