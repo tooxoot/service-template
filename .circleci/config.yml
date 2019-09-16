@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build_and_test:
     working_directory: /build
     docker:
       - image: docker:17.05.0-ce-git
@@ -22,23 +22,11 @@ jobs:
           command: |
             VERSION=$(echo $CIRCLE_SHA1 | cut -c1-7)
             docker build --target release -t service-template-release:$VERSION .
-  unittest:
-    working_directory: /unittest
-    docker:
-      - image: docker:17.05.0-ce-git
-    steps:
-      - setup_remote_docker
       - run:
           name: run unittest
           command: |
             VERSION=$(echo $CIRCLE_SHA1 | cut -c1-7)
             docker run -d -p 3000:3000 --name unittest service-template-unittest:$VERSION
-  integrationtest:
-    working_directory: /integrationtest
-    docker:
-      - image: docker:17.05.0-ce-git
-    steps:
-      - setup_remote_docker
       - run:
           name: run release container
           command: |
@@ -51,12 +39,6 @@ jobs:
             docker run -d -p 3000:3000 --name integrationtest service-template-integrationtest:$VERSION
 workflows:
   version: 2
-  build-and-deploy:
+  build-and-test:
     jobs:
-      - build
-      - unittest:
-          requires:
-            - build
-      - integrationtest:
-          requires:
-            - unittest
+      - build_and_test
