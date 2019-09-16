@@ -26,7 +26,7 @@ jobs:
           name: run unittest
           command: |
             VERSION=$(echo $CIRCLE_SHA1 | cut -c1-7)
-            docker run -d -p 3000:3000 --name unittest service-template-unittest:$VERSION
+            docker run -d --name unittest service-template-unittest:$VERSION
       - run:
           name: run release container
           command: |
@@ -36,7 +36,7 @@ jobs:
           name: run integrationtest
           command: |
             VERSION=$(echo $CIRCLE_SHA1 | cut -c1-7)
-            docker run -d -p 3000:3000 --name integrationtest service-template-integrationtest:$VERSION
+            docker run -d --name integrationtest service-template-integrationtest:$VERSION
 workflows:
   version: 2
   build-and-test:
