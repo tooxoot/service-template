@@ -31,7 +31,7 @@ jobs:
           name: run release container
           command: |
             VERSION=$(echo $CIRCLE_SHA1 | cut -c1-7)
-            docker run -d -p 3000:3000 --name release service-template-relese:$VERSION
+            docker run -d -p 3000:3000 --name release service-template-release:$VERSION
       - run:
           name: run integrationtest
           command: |
