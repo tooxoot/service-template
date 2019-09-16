@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    working_directory: /build
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - run:
+        name: build release
+        command: |
+          VERSION=$(git rev-parse --short HEAD)
+          docker build --target release -t service-template:$VERSION .
